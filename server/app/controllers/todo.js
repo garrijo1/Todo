@@ -7,91 +7,95 @@ var express = require('express'),
 module.exports = function (app, config) {
     app.use('/api', router);
     
-    router.get('/todo/:userId', function (req, res, next){
-        logger.log('Find ToDos by Id', 'verbose');
+    router.get('/todo/user/:userId', function (req, res, next){
+        logger.log('Find ToDo by Id', 'verbose');
 
-        // var query = Todo.find({userId:req.params.userId})
-        // .sort(req.query.order)
-        // .exec()
-        // .then(result => {
-        //    if(result && result.length) {
-        //      res.status(200).json(result);
-        //  } else {
-        //      res.status(404).json({message: "No todos"});
-        //  }
-        // })
-        // .catch(err => {
-        //   return next(err);
-        // });
+        var query = Todo.find({userId:req.params.userId})
+        .sort(req.query.order)
+        .exec()
+        .then(result => {
+           if(result && result.length) {
+             res.status(200).json(result);
+         } else {
+             res.status(404).json({message: "No todo"});
+         }
+        })
+        .catch(err => {
+          return next(err);
+        });
+    });  
 
-        res.status(200).json({message: 'Find ToDos by Id'});
+    //     res.status(200).json({message: 'Find ToDo by Id'});
 
-    });
+    // });
 
-    router.get('todo/:todoId', function (req, res, next){
+    router.get('/todo/:todoId', function (req, res, next){
         logger.log('Get My ToDo List'+ req.params.userId, 'verbose');
 
-        // User.findById(req.params.userId)
-        //             .then(user => {
-        //                 if(user){
-        //                     res.status(200).json(user);
-        //                 } else {
-        //                     res.status(404).json({message: "No user found"});
-        //                 }
-        //             })
-        //             .catch(error => {
-        //                 return next(error);
-        //             });
-        //     }); 
+        Todo.findById(req.params.todoId)
+                    .then(todo => {
+                        if(todo){
+                            res.status(200).json(todo);
+                        } else {
+                            res.status(404).json({message: "No user found"});
+                        }
+                    })
+                    .catch(error => {
+                        return next(error);
+                    });
+            }); 
 
-        res.status(200).json({message: 'Get My ToDo List'+ req.params.userId});
-    });    
+    //     res.status(200).json({message: 'Get My ToDo List'+ req.params.userId});
+    // });    
 
-    router.post('todo/todoId', function(req, res, next){
+    router.post('/todo', function(req, res, next){
         logger.log('Create todo', 'verbose');
 
-    //     var todo = new todo(req.body);
-    //     todo.save()
-    //    .then(result => {
-    //        res.status(201).json(result);
-    //    })
-    //    .catch( err => {
-    //       return next(err);
-    //    });
+        var todo = new Todo(req.body);
+        todo.save()
+       .then(result => {
+           res.status(201).json(result);
+       })
+       .catch( err => {
+          return next(err);
+       });
+    });  
 
-        res.status(201).json({message: 'ToDo created'+ req.params.userId});
+    //     res.status(201).json({message: 'ToDo created'+ req.params.userId});
 
-    });
+    // });
     
-    router.put('todo/todoId', function (req, res, next){
-        logger.log('Update todo'+ req.params.userId, 'verbose');
+    router.put('/todo/:todoId', function (req, res, next){
+        logger.log('Update todo with id todoid'+ req.params.todoId, 'verbose');
 
         
-        //     User.findOneAndUpdate({_id: req.params.userId}, 		
-        //     req.body, {new:true, multi:false})
-        //         .then(user => {
-        //             res.status(200).json(user);
-        //         })
-        //         .catch(error => {
-        //             return next(error);
-        //         });
+        Todo.findOneAndUpdate({_id: req.params.todoId}, 		
+            req.body, {new:true, multi:false})
+                .then(todo => {
+                    res.status(200).json(todo);
+                })
+                .catch(error => {
+                    return next(error);
+                });
+    });
 
-        res.status(200).json({message: 'Update ToDo'+ req.params.userId});
-    });  
+    //     res.status(200).json({message: 'Update ToDo'+ req.params.userId});
+    // });  
 
-    router.delete('todo/todoId', function (req, res, next){
+    router.delete('/todo/:todoId', function (req, res, next){
         logger.log('Delete ToDo'+ req.params.userId, 'verbose');
 
-        // User.remove({ _id: req.params.todoId })
-        //         .then(user => {
-        //             res.status(200).json({msg: "User Deleted"});
-        //         })
-        //         .catch(error => {
-        //             return next(error);
-        //         });
+        Todo.remove({ _id: req.params.todoId })
+                .then(user => {
+                    res.status(200).json({msg: "todo Deleted"});
+                })
+                .catch(error => {
+                    return next(error);
+                });
+    });
 
-        res.status(200).json({message: 'Delete ToDo'+ req.params.userId});
-    });  
+    //     res.status(200).json({message: 'Delete ToDo'+ req.params.userId});
+    // });  
 
 //     router.post('/login', function(req, res, next){
 //         console.log(req.body);

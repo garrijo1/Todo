@@ -16,8 +16,6 @@ module.exports = function (app, config) {
    throw new Error('unable to connect to database at ' + config.db);
  });
 
-
-
   if(process.env.NODE_ENV !== 'test') {
     app.use(morgan('dev'));
 
@@ -44,7 +42,7 @@ module.exports = function (app, config) {
   
  var controllers = glob.sync(config.root + '/app/controllers/*.js');
    controllers.forEach(function (controller) {
-    require(controller);
+    require(controller)(app,config);
    });
 
     
@@ -66,8 +64,8 @@ module.exports = function (app, config) {
 //  });
 
 
-  require('../app/controllers/users')(app, config);
-  require('../app/controllers/todo')(app, config);
+  // require('../app/controllers/users')(app, config);
+  // require('../app/controllers/todo')(app, config);
 
 
   app.use(express.static(config.root + '/public'));
@@ -77,14 +75,17 @@ module.exports = function (app, config) {
       res.status(404);
       res.send('404 Not Found');
     });
-  
+
     app.use(function (err, req, res, next) {
-      logger.error(err.stack);
+      if(process.env.NODE_ENV !== 'test') {
+        console.error(err.stack);
+      }
       res.type('text/plan');
       res.status(500);
-      res.send('500 Sever Error');  
+      res.send('500 Sever Error');
     });
+    
   
     logger.log("Starting application");
   
-  };
+};
