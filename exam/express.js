@@ -68,7 +68,7 @@ module.exports = function (app, config) {
   // require('../app/controllers/todo')(app, config);
 
 
-  app.use(express.static(config.root + '/public'));
+  app.use(express.static(config.root + '/public')); 
   
     app.use(function (req, res) {
       res.type('text/plan');
