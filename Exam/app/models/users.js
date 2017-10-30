@@ -9,6 +9,6 @@ var mySchema = new Schema({
     dateRegistered: {type:Date, default:Date.now},
     status: {type: Boolean, default: true},
 });
-
+//This is the schema for any records posted 
 module.exports = 
  Mongoose.model('users', mySchema);

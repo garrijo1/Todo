@@ -11,5 +11,5 @@ development: {
  },  
 
   };
-
+//above creates a path for db connnection
  module.exports = config[env];

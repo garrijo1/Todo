@@ -13,7 +13,7 @@ mongoose.Promise = require('bluebird');
  db.on('error', function () {
    throw new Error('unable to connect to database at ' + config.db);
  });
- 
+ //Express process requests incoming to middleware
    mongoose.set('debug', true);
    mongoose.connection.once('open', function callback() {
      console.log("Mongoose connected to the database");
