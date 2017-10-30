@@ -2,7 +2,7 @@ var express = require('express'),
 router = express.Router(), 
 
 mongoose = require('mongoose'),
-User = mongoose.model('users');
+User = mongoose.model('users2');
 //variables above assist in routing requests to schemas
 module.exports = function (app, config) {
 app.use('/api', router);
@@ -51,6 +51,7 @@ router.post('/users', function(req, res, next){
       return next(err);
    });
  });
+
 
 };
 

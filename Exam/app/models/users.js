@@ -2,13 +2,9 @@ var Mongoose = require('mongoose');
 var Schema = Mongoose.Schema;
 
 var mySchema = new Schema({
-    firstName:{type:String, required: true},
-    lastName: {type:String, required: true},
-    email:{type:String, required: true, unique: true},
-    password: {type: String, required: true},
-    dateRegistered: {type:Date, default:Date.now},
-    status: {type: Boolean, default: true},
+    property1:{type:String, required: true},
+    property2:{type:Number, required: true},
 });
 //This is the schema for any records posted 
 module.exports = 
- Mongoose.model('users', mySchema);
+ Mongoose.model('users2', mySchema);
