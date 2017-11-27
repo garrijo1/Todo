@@ -9,7 +9,7 @@ import {AuthService} from 'aurelia-auth';
       this.router = router;
       this.auth = auth;
       this.loginError = '';
-      this.user=users;
+      this.users=users;
       this.message = 'Home';
       this.showLogin=true;
           //this binds message variable

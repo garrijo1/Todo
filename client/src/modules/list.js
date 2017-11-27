@@ -1,9 +1,9 @@
 import {inject} from 'aurelia-framework';
 import {Router} from 'aurelia-router';
 import {AuthService} from 'aurelia-auth';
-import {Todo} from '../resources/data/todo';
+import {ToDo} from '../resources/data/todo';
 
-@inject(Router, AuthService, Todo)
+@inject(Router, AuthService, ToDo)
 export class List {
   constructor(router, auth, todo) {
   this.router = router;

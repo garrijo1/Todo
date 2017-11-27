@@ -39,7 +39,7 @@ module.exports = function (app, config) {
         .sort(req.query.order)
         .exec()
         .then(result => {
-           if(result && result.length) {
+           if(result) {
              res.status(200).json(result);
          } else {
              res.status(404).json({message: "No todo"});
