@@ -2,12 +2,37 @@ var express = require('express'),
     router = express.Router(),
     logger = require('../../config/logger'),
     mongoose = require('mongoose'),
-    Todo = mongoose.model('todo');
+    Todo = mongoose.model('todo'),
+    passportService = require('../../config/passport'),
+    passport = require('passport'),
+    multer = require('multer'),
+    mkdirp = require('mkdirp');
+    
+var upload = multer({storage:storage});
+
+var requireAuth = passport.authenticate('jwt', { session: false });
+   
+var storage = multer.diskStorage({
+	destination: function (req, file, cb) {      
+	  	var path = config.uploads + req.params.userId + "/";
+		mkdirp(path, function(err) {
+			if(err){
+				res.status(500).json(err);
+			} else {
+				cb(null, path);
+			}
+		});
+	},
+	filename: function (req, file, cb) {
+		let fileName = file.originalname.split('.');   
+		cb(null, fileName[0] + new Date().getTime() + "." + fileName[fileName.length - 1]);
+	}
+  });
 
 module.exports = function (app, config) {
     app.use('/api', router);
     
-    router.get('/todo/user/:userId', function (req, res, next){
+    router.get('/todo/user/:userId', requireAuth, function (req, res, next){
         logger.log('Find ToDo by Id', 'verbose');
 
         var query = Todo.find({userId:req.params.userId})
@@ -29,7 +54,7 @@ module.exports = function (app, config) {
 
     // });
 
-    router.get('/todo/:todoId', function (req, res, next){
+    router.get('/todo/:todoId', requireAuth, function (req, res, next){
         logger.log('Get My ToDo List'+ req.params.userId, 'verbose');
 
         Todo.findById(req.params.todoId)
@@ -61,11 +86,35 @@ module.exports = function (app, config) {
        });
     });  
 
+    router.post('/todo/upload/:userId/:todoId', upload.any(), function(req, res, next){
+            logger.log('Upload file for todo ' + req.params.todoId + ' and ' + req.params.userId, 'verbose');
+            
+            Todo.findById(req.params.todoId, function(err, todo){
+                if(err){ 
+                    return next(err);
+                } else {     
+                    if(req.files){
+                        todo.file = {
+                            filename : req.files[0].filename,
+                            originalName : req.files[0].originalname,
+                            dateUploaded : new Date()
+                        };
+                    }           
+                    todo.save()
+                        .then(todo => {
+                            res.status(200).json(todo);
+                        })
+                        .catch(error => {
+                            return next(error);
+                        });
+                }
+            });
+        });
     //     res.status(201).json({message: 'ToDo created'+ req.params.userId});
 
     // });
     
-    router.put('/todo/:todoId', function (req, res, next){
+    router.put('/todo/:todoId', requireAuth, function (req, res, next){
         logger.log('Update todo with id todoid'+ req.params.todoId, 'verbose');
 
         
@@ -82,7 +131,7 @@ module.exports = function (app, config) {
     //     res.status(200).json({message: 'Update ToDo'+ req.params.userId});
     // });  
 
-    router.delete('/todo/:todoId', function (req, res, next){
+    router.delete('/todo/:todoId', requireAuth, function (req, res, next){
         logger.log('Delete ToDo'+ req.params.userId, 'verbose');
 
         Todo.remove({ _id: req.params.todoId })

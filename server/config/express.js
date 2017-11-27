@@ -5,9 +5,11 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var bluebird = require('bluebird');
 var glob = require('glob');
+var cors = require('cors');
+
 
 module.exports = function (app, config) {
-
+ app.use(cors({origin: 'http://localhost:9000'}));
  logger.log("Loading Mongoose functionality");
  mongoose.Promise = require('bluebird');
  mongoose.connect(config.db, {useMongoClient: true});
@@ -41,10 +43,9 @@ module.exports = function (app, config) {
    });
   
  var controllers = glob.sync(config.root + '/app/controllers/*.js');
-   controllers.forEach(function (controller) {
+   controllers.forEach(function(controller) {
     require(controller)(app,config);
    });
-
     
 //     var users = [	{name: 'John', email: 'woo@hoo.com'},
 // 		{name: 'Betty', email: 'loo@woo.com'},
@@ -77,13 +78,18 @@ module.exports = function (app, config) {
     });
 
     app.use(function (err, req, res, next) {
-      if(process.env.NODE_ENV !== 'test') {
-        console.error(err.stack);
-      }
+      console.log(err);
+      if (process.env.NODE_ENV !== 'test') logger.log(err.stack,'error');
       res.type('text/plan');
-      res.status(500);
-      res.send('500 Sever Error');
+      if(err.status){
+        res.status(err.status).send(err.message);
+      } else {
+        res.status(500).send('500 Sever Error');
+      }
     });
+  
+    app.use(bodyParser.json({limit: '1000mb'}));
+    app.use(bodyParser.urlencoded({limit: '1000mb', extended: true}));
     
   
     logger.log("Starting application");
