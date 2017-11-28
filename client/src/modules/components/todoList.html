@@ -18,7 +18,7 @@
                             class="fa fa-plus fa-lg" aria-hidden="true"></i></span>
                     </span>
                 </div>
-    <div show.bind="todos.todosArray.length">
+    <div show.bind="todo.todosArray.length">
 		<table class="table">
 				<thead>
 					<tr>
@@ -44,7 +44,7 @@
                     </tbody>                    
 			</table>
 	</div>
-	<div show.bind="!todos.todosArray.length">
+	<div show.bind="!todo.todosArray.length">
 		<h2>Apparently, you don't have anything to do!</h2>
 	</div>
 
