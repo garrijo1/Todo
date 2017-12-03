@@ -10,10 +10,7 @@ var mySchema = new Schema({
     dateCreated:{type:Date, default:Date.now},
     dateDue:{type:Date,default:Date.now},
     completed: {type:Boolean, default:false},
-    file:{
-    fileName: {type:String}, 
-    originalName:{type:String}, 
-    dateUploaded:{type:Date,default:Date.now}},
+    file: {fileName: String, originalName: String, dateUploaded: Date }
 });
 
 module.exports = 

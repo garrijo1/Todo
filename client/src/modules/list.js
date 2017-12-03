@@ -39,7 +39,7 @@ export class List {
       } else {
         var todoId = response._id;
         if (this.filesToUpload && this.filesToUpload.length) {
-          await this.todos.uploadFile(this.filesToUpload, this.user._id, todoId);
+          await this.todo.uploadFile(this.filesToUpload, this.user._id, todoId);
           this.filesToUpload = [];
         }
       }
@@ -53,7 +53,7 @@ export class List {
   }
 
   deleteTodo(todo) {
-    this.todos.deleteTodo(todo._id);
+    this.todo.deleteTodo(todo._id);
   }
 
   completeTodo(todo) {
