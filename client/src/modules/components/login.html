@@ -15,7 +15,6 @@
             text-align: center;
             box-sizing: border-box;
             background-color: green;
-
             font-style: italic;
             }
             div.pt2{
@@ -82,15 +81,15 @@
             background-size: cover;}
             input{
             width:35% !important;
-            display:block; 
-            width:20%; 
-            margin:0 auto;
+            display:block !important; 
+            width:40% !important; 
+            margin:0 auto !important;
             }
           </style>
         </head>
         <body>
             <div id="grad1">
-            <h1 style="text-align:center;background-color:yellow;font-family:tahoma;font-weight:bold;font-size: 26px;line-height:2.2 !important;">JOSEPH GARRISON'S TO-DO LIST</h1>
+            <h1 style="text-align:center;background-color:yellow;font-family:tahoma;font-weight:bold;font-size: 26px;">JOSEPH GARRISON'S TO-DO LIST</h1>
             <div class="pt1">
             <h2 style="text-align:center;color:white;">Login Page</h2></div>
             <div class="container">
@@ -103,7 +102,7 @@
                 <label for="password">Password</label>
                 <input value.bind="password" type="password" class="form-control" id="password" placeholder="Password"></input>
                 </div>
-                <button class="button";click.trigger="login()">Login</button>  
+                <button class="button" click.trigger="login()">Login</button>  
                 <h2>
                 <a href="registerLink" click.trigger="showRegister()">First-time user? Click here to register</a>
                 </h2>
